@@ -1,234 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  Alert,
-  Animated,
-  Dimensions,
-  Easing,
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
   SafeAreaView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
 } from 'react-native';
-
-export interface PintProps {
-  name: 'Lager' | 'Guinness' | 'Cider' | 'Pale Ale' | 'Bitter';
-  color: string;
-  pintSize?: number;
-  onFinishPint: () => void;
-}
+import { PintProps, PintsList, AnimatedPintTotal, Header } from './src/components'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface DrankPint extends PintProps {
   dateDrank: Date;
 }
 
-export interface PintsList {
-  pints: PintProps[];
-  onMomentumScrollEnd: ({
-    nativeEvent,
-  }: NativeSyntheticEvent<NativeScrollEvent>) => void;
-  currentIndex: number;
-}
-
-const Pint = (props: PintProps) => {
-  const { name, color, pintSize, onFinishPint } = props;
-  const { width, height } = Dimensions.get('window');
-  const [sips, setSips] = useState(0);
-  const drinkAnimation = useRef(new Animated.Value(0)).current;
-
-  const sip = () =>
-    Animated.timing(drinkAnimation, {
-      toValue: (1 / 11) * (sips + 1),
-      duration: 1000,
-      useNativeDriver: true,
-    }).start(() => {
-      if (sips >= 9) {
-        onFinishPint();
-        refill();
-      } else {
-        setSips((prev) => prev + 1);
-      }
-    });
-
-  const down = () =>
-    Animated.timing(drinkAnimation, {
-      toValue: 1,
-      duration: 5000,
-      useNativeDriver: true,
-    }).start(() => {
-      onFinishPint();
-      refill();
-    });
-
-  const refill = () =>
-    Animated.timing(drinkAnimation, {
-      toValue: 0,
-      duration: 2000,
-      useNativeDriver: true,
-    }).start(() => {
-      setSips(0);
-    });
-
-  const drinkTranslate = drinkAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, pintSize as number],
-  });
-
-  const drinkOpacity = drinkAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [1, 0.4],
-  });
-
-  return (
-    <TouchableOpacity
-      activeOpacity={1}
-      onPress={sip}
-      onLongPress={() => down()}
-    >
-      <Animated.View
-        style={{
-          width,
-          height,
-          backgroundColor: color,
-          borderRadius: 16,
-          opacity: drinkOpacity,
-          transform: [{ translateY: drinkTranslate }],
-        }}
-      >
-        <View
-          style={{
-            width,
-            height: 80,
-            backgroundColor: 'white',
-            borderTopWidth: 5,
-            borderTopColor: '#00000005',
-            borderBottomWidth: 5,
-            borderBottomColor: '#00000005',
-          }}
-        ></View>
-      </Animated.View>
-    </TouchableOpacity>
-  );
-};
-
-const PintsList = (props: PintsList) => {
-  const { pints, onMomentumScrollEnd, currentIndex } = props;
-  const scrollRef = useRef<FlatList>(null);
-
-  const onScroll = (value: number) => {
-    scrollRef?.current?.scrollToIndex({ index: value, animated: true });
-  };
-
-  useEffect(() => {
-    onScroll(currentIndex);
-  }, [currentIndex]);
-  return (
-    <View style={styles.glass}>
-      <StatusBar style='auto' />
-
-      <FlatList
-        ref={scrollRef}
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        data={pints}
-        pagingEnabled={true}
-        decelerationRate={'fast'}
-        snapToAlignment={'start'}
-        snapToInterval={Dimensions.get('window').width}
-        renderItem={({ item }) => (
-          <Pint {...item} pintSize={Dimensions.get('window').height - 36} />
-        )}
-        keyExtractor={(item) => item.name}
-        onMomentumScrollEnd={onMomentumScrollEnd}
-      />
-    </View>
-  );
-};
-
-const AnimatedPintTotal = (props: { color: string; number: number }) => {
-  const { color, number } = props;
-  const totalAnimation = useRef(new Animated.Value(0)).current;
-  const animateTotal = () =>
-    Animated.timing(totalAnimation, {
-      toValue: 0,
-      duration: 0,
-      useNativeDriver: true,
-    }).start(() =>
-      Animated.timing(totalAnimation, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-        easing: Easing.elastic(1),
-      }).start()
-    );
-
-  useEffect(() => {
-    console.log('______here', number);
-    animateTotal();
-  }, [number]);
-
-  const containerTransform = totalAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [60, 0],
-  });
-
-  const containerTransformX = totalAnimation.interpolate({
-    inputRange: [0, 0.25, 0.5, 0.75, 1],
-    outputRange: [0, -2, 0, 2, 0],
-  });
-
-  const containerGrow = totalAnimation.interpolate({
-    inputRange: [0, 0.8, 1],
-    outputRange: [0.5, 1.1, 1],
-  });
-
-  const textTransform = totalAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-200, 0],
-  });
-  return (
-    <Animated.View
-      style={{
-        position: 'absolute',
-        width: Dimensions.get('window').width / 3,
-        height: Dimensions.get('window').width / 3,
-        borderRadius: 100,
-        backgroundColor: color,
-        top: '50%',
-        left: '33.3%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        transform: [
-          { translateY: containerTransform },
-          { translateX: containerTransformX },
-          { scale: containerGrow },
-        ],
-      }}
-    >
-      <Animated.Text
-        style={[
-          styles.pintTotal,
-          { transform: [{ translateY: textTransform }] },
-        ]}
-      >
-        {number}
-      </Animated.Text>
-    </Animated.View>
-  );
-};
-
 export default function App() {
   const [finishedPints, setFinishedPints] = useState<DrankPint[]>([]);
 
   const onFinishPint = (index: number) => {
-    setFinishedPints((prev) => [
+    setFinishedPints((prev) => {
+      const update = [
       ...prev,
       { ...pints[index], dateDrank: new Date() },
-    ]);
+    ]
+    storeData(update)
+    return update
+  });
   };
   const [pints, setPints] = useState<PintProps[]>([
     {
@@ -274,53 +70,30 @@ export default function App() {
     }
   };
 
+  const storeData = async (value: DrankPint[]) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('Drank Pints', jsonValue)
+    } catch (e) {
+      console.log(e)  
+  }}
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('Drank Pints')
+      setFinishedPints( jsonValue != null ? JSON.parse(jsonValue) : [] );
+    } catch(e) {
+      console.log(e)
+    }
+  }  
+
+  useEffect(() => {
+    getData()
+  }, [])
+
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          height: 50,
-          overflow: 'hidden',
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => toggleDrinks('-')}
-          style={{ paddingLeft: 16 }}
-        >
-          <Text style={[styles.pintName, { opacity: 0.2 }]}>{`<`}</Text>
-        </TouchableOpacity>
-        <FlatList
-          ref={scrollRef}
-          data={pints}
-          scrollEnabled={false}
-          pagingEnabled={true}
-          decelerationRate={'fast'}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                height: 50,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Text style={styles.pintName}>
-                {item.name} (
-                {finishedPints.filter((pint) => pint.name === item.name).length}
-                )
-              </Text>
-            </View>
-          )}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.name}
-        />
-        <TouchableOpacity
-          onPress={() => toggleDrinks('+')}
-          style={{ paddingRight: 16 }}
-        >
-          <Text style={[styles.pintName, { opacity: 0.2 }]}>{`>`}</Text>
-        </TouchableOpacity>
-      </View>
+      <Header {...{ toggleDrinks, scrollRef, pints, finishedPints }} />
       <PintsList {...{ pints, onMomentumScrollEnd, currentIndex }} />
       <AnimatedPintTotal
         color={pints[currentIndex].color}
@@ -334,22 +107,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  glass: {
-    borderTopWidth: 3,
-    borderColor: '#00000060',
-
-    marginTop: 30,
-
-    overflow: 'hidden',
-  },
-  pintName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  pintTotal: {
-    fontSize: 100,
-    fontWeight: 'bold',
-    color: 'white',
-  },
+  }
 });
