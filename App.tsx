@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   NativeScrollEvent,
@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { PintProps, PintsList, AnimatedPintTotal, Header } from './src/components'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface DrankPint extends PintProps {
   dateDrank: Date;
@@ -16,10 +17,14 @@ export default function App() {
   const [finishedPints, setFinishedPints] = useState<DrankPint[]>([]);
 
   const onFinishPint = (index: number) => {
-    setFinishedPints((prev) => [
+    setFinishedPints((prev) => {
+      const update = [
       ...prev,
       { ...pints[index], dateDrank: new Date() },
-    ]);
+    ]
+    storeData(update)
+    return update
+  });
   };
   const [pints, setPints] = useState<PintProps[]>([
     {
@@ -64,6 +69,27 @@ export default function App() {
       onScroll(currentIndex - 1);
     }
   };
+
+  const storeData = async (value: DrankPint[]) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('Drank Pints', jsonValue)
+    } catch (e) {
+      console.log(e)  
+  }}
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('Drank Pints')
+      setFinishedPints( jsonValue != null ? JSON.parse(jsonValue) : [] );
+    } catch(e) {
+      console.log(e)
+    }
+  }  
+
+  useEffect(() => {
+    getData()
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
