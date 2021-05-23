@@ -4,6 +4,7 @@ import {
   View,
   StyleSheet
 } from 'react-native';
+import { AnimatedPintTotal } from '../../animated-pint-total';
 import { HeaderTextProps } from './header-text.types'
 
 const HeaderText = ( props: HeaderTextProps ) => {
@@ -12,10 +13,14 @@ const HeaderText = ( props: HeaderTextProps ) => {
   return(
     <View style={styles.headerTitle} >
       <Text style={styles.pintName}>
-        {item.name} (
-        {finishedPints.filter((pint) => pint.name === item.name).length}
-        )
+        {item.name} 
       </Text>
+      <AnimatedPintTotal 
+        color={'black'} 
+        number={finishedPints.filter((pint) => pint.name === item.name).length} 
+        size={24}
+        textSizeRatio={0.6}
+      />
     </View>
   )
 }
@@ -24,11 +29,14 @@ const styles = StyleSheet.create({
   pintName: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginRight: 6
   },
   headerTitle: {
     height: 50,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flexDirection: 'row'
+
   }
 });
 

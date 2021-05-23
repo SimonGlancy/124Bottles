@@ -1,13 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
 import {
   Animated,
   Easing,
   Dimensions,
   StyleSheet,
+  View
 } from 'react-native';
 
-  const AnimatedPintTotal = (props: { color: string; number: number }) => {
-    const { color, number } = props;
+
+
+  const AnimatedPintTotal = (props: { color: string; number: number, size: number, textSizeRatio?: number }) => {
+    const { color, number, size, textSizeRatio = 0.7 } = props;
     const totalAnimation = useRef(new Animated.Value(0)).current;
     const animateTotal = () =>
       Animated.timing(totalAnimation, {
@@ -24,7 +27,7 @@ import {
       );
   
     useEffect(() => {
-      console.log('______here', number);
+      
       animateTotal();
     }, [number]);
   
@@ -47,16 +50,16 @@ import {
       inputRange: [0, 1],
       outputRange: [-200, 0],
     });
+
     return (
       <Animated.View
         style={{
-          position: 'absolute',
-          width: Dimensions.get('window').width / 3,
-          height: Dimensions.get('window').width / 3,
-          borderRadius: 100,
+          width: size,
+          height: size,
+          borderRadius: size,
+
           backgroundColor: color,
-          top: '50%',
-          left: '33.3%',
+ 
           alignItems: 'center',
           justifyContent: 'center',
           transform: [
@@ -69,6 +72,7 @@ import {
         <Animated.Text
           style={[
             styles.pintTotal,
+            { fontSize: size * textSizeRatio},
             { transform: [{ translateY: textTransform }] },
           ]}
         >
@@ -80,7 +84,6 @@ import {
 
 const styles = StyleSheet.create({
   pintTotal: {
-    fontSize: 100,
     fontWeight: 'bold',
     color: 'white',
   },

@@ -4,7 +4,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  StyleSheet
+  StyleSheet,
+  Image
 } from 'react-native';
 import { HeaderProps } from './header.types';
 import { HeaderText } from './header-text'
@@ -18,7 +19,7 @@ const Header = ( props: HeaderProps ) => {
           onPress={() => toggleDrinks('-')}
           style={{ paddingLeft: 16 }}
         >
-          <Text style={[styles.pintName, { opacity: 0.2 }]}>{`<`}</Text>
+          <Image source={require('../../../assets/Chevron-right.png')} style={{height: 18, width: 18, transform: [{ rotate: '180deg'}]}}/>
         </TouchableOpacity>
         <FlatList
           ref={scrollRef}
@@ -36,7 +37,7 @@ const Header = ( props: HeaderProps ) => {
           onPress={() => toggleDrinks('+')}
           style={{ paddingRight: 16 }}
         >
-          <Text style={[styles.pintName, { opacity: 0.2 }]}>{`>`}</Text>
+          <Image source={require('../../../assets/Chevron-right.png')} style={{height: 18, width: 18}}/>
         </TouchableOpacity>
       </View>
   )
