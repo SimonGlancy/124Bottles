@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
   TouchableOpacity,
   View,
+  StyleSheet
 } from 'react-native';
 import { PintProps } from './pint.types'
 
-
 const Pint = (props: PintProps) => {
-  const { name, color, pintSize, onFinishPint } = props;
+  const { color, pintSize, onFinishPint } = props;
   const { width, height } = Dimensions.get('window');
   const [sips, setSips] = useState(0);
   const drinkAnimation = useRef(new Animated.Value(0)).current;
@@ -74,19 +74,23 @@ const Pint = (props: PintProps) => {
         }}
       >
         <View
-          style={{
-            width,
-            height: 80,
-            backgroundColor: 'white',
-            borderTopWidth: 5,
-            borderTopColor: '#00000005',
-            borderBottomWidth: 5,
-            borderBottomColor: '#00000005',
-          }}
+          style={styles.foam}
         ></View>
       </Animated.View>
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  foam: {
+    width: '100%',
+    height: 80,
+    backgroundColor: 'white',
+    borderTopWidth: 5,
+    borderTopColor: '#00000005',
+    borderBottomWidth: 5,
+    borderBottomColor: '#00000005',
+  }
+})
 
 export { Pint } 
