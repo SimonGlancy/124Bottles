@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   FlatList,
   NativeScrollEvent,
@@ -130,21 +129,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  glass: {
-    borderTopWidth: 3,
-    borderColor: '#00000060',
-
-    marginTop: 30,
-
-    overflow: 'hidden',
-  },
   pintName: {
     fontSize: 24,
     fontWeight: 'bold',
-  },
-  pintTotal: {
-    fontSize: 100,
-    fontWeight: 'bold',
-    color: 'white',
-  },
+  }
 });
