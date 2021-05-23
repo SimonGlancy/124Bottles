@@ -7,6 +7,7 @@ import {
   StyleSheet
 } from 'react-native';
 import { HeaderProps } from './header.types';
+import { HeaderText } from './header-text'
 
 const Header = ( props: HeaderProps ) => {
   const { toggleDrinks, scrollRef, pints, finishedPints } = props
@@ -26,13 +27,7 @@ const Header = ( props: HeaderProps ) => {
           pagingEnabled={true}
           decelerationRate={'fast'}
           renderItem={({ item }) => (
-            <View style={styles.headerTitle} >
-              <Text style={styles.pintName}>
-                {item.name} (
-                {finishedPints.filter((pint) => pint.name === item.name).length}
-                )
-              </Text>
-            </View>
+            <HeaderText {...{finishedPints, item}} />
           )}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.name}
@@ -57,11 +52,6 @@ const styles = StyleSheet.create({
   pintName: {
     fontSize: 24,
     fontWeight: 'bold',
-  },
-  headerTitle: {
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center'
   }
 });
 
