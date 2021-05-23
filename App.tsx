@@ -14,53 +14,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Pint, PintProps } from './src/components'
+import { PintProps, PintsList } from './src/components'
 
 export interface DrankPint extends PintProps {
   dateDrank: Date;
 }
-
-export interface PintsList {
-  pints: PintProps[];
-  onMomentumScrollEnd: ({
-    nativeEvent,
-  }: NativeSyntheticEvent<NativeScrollEvent>) => void;
-  currentIndex: number;
-}
-
-const PintsList = (props: PintsList) => {
-  const { pints, onMomentumScrollEnd, currentIndex } = props;
-  const scrollRef = useRef<FlatList>(null);
-
-  const onScroll = (value: number) => {
-    scrollRef?.current?.scrollToIndex({ index: value, animated: true });
-  };
-
-  useEffect(() => {
-    onScroll(currentIndex);
-  }, [currentIndex]);
-  return (
-    <View style={styles.glass}>
-      <StatusBar style='auto' />
-
-      <FlatList
-        ref={scrollRef}
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        data={pints}
-        pagingEnabled={true}
-        decelerationRate={'fast'}
-        snapToAlignment={'start'}
-        snapToInterval={Dimensions.get('window').width}
-        renderItem={({ item }) => (
-          <Pint {...item} pintSize={Dimensions.get('window').height - 36} />
-        )}
-        keyExtractor={(item) => item.name}
-        onMomentumScrollEnd={onMomentumScrollEnd}
-      />
-    </View>
-  );
-};
 
 const AnimatedPintTotal = (props: { color: string; number: number }) => {
   const { color, number } = props;
