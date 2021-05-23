@@ -22,6 +22,7 @@ const PintsList = (props: PintsListProps) => {
   return (
     <View style={styles.glass}>
       <FlatList
+        bounces={false}
         ref={scrollRef}
         showsHorizontalScrollIndicator={false}
         horizontal

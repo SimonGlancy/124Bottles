@@ -1,16 +1,36 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import {
+  Alert,
+  Dimensions,
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
   SafeAreaView,
   StyleSheet,
+  View,
 } from 'react-native';
 import { PintProps, PintsList, AnimatedPintTotal, Header } from './src/components'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface DrankPint extends PintProps {
   dateDrank: Date;
+}
+
+export const AbsoluteWrapper: FunctionComponent = (props) => {
+  const { children } = props
+  return(
+    <View 
+    pointerEvents="none"
+    style={{
+      position: 'absolute',
+      top: '50%',
+      left: 0, 
+      right: 0,
+      alignItems: 'center'
+      }}>
+      {children}
+    </View>
+  )
 }
 
 export default function App() {
@@ -91,14 +111,24 @@ export default function App() {
     getData()
   }, [])
 
+  useEffect(() => {
+    if(finishedPints.length === 124) {
+      Alert.alert('Congrats', 'You just drank enough to save the Economy!')
+    }
+  },[finishedPints.length])
+
   return (
     <SafeAreaView style={styles.container}>
       <Header {...{ toggleDrinks, scrollRef, pints, finishedPints }} />
       <PintsList {...{ pints, onMomentumScrollEnd, currentIndex }} />
-      <AnimatedPintTotal
-        color={pints[currentIndex].color}
-        number={finishedPints.length}
-      />
+      <AbsoluteWrapper>
+        <AnimatedPintTotal
+          color={pints[currentIndex].color}
+          number={finishedPints.length}
+          size={200}
+          textSizeRatio={0.4}
+        />
+      </AbsoluteWrapper>
     </SafeAreaView>
   );
 }
