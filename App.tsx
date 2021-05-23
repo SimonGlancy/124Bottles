@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { RefObject, useRef, useState } from 'react';
 import {
   FlatList,
   NativeScrollEvent,
@@ -13,6 +13,65 @@ import { PintProps, PintsList, AnimatedPintTotal } from './src/components'
 
 export interface DrankPint extends PintProps {
   dateDrank: Date;
+}
+
+export interface HeaderProps {
+  finishedPints: DrankPint[];
+  toggleDrinks: (direction: '+' | '-') => void;
+  scrollRef: RefObject<FlatList>;
+  pints: PintProps[]
+}
+
+const Header = ( props: HeaderProps ) => {
+  const { toggleDrinks, scrollRef, pints, finishedPints } = props
+
+  return(
+    <View
+        style={{
+          height: 50,
+          overflow: 'hidden',
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => toggleDrinks('-')}
+          style={{ paddingLeft: 16 }}
+        >
+          <Text style={[styles.pintName, { opacity: 0.2 }]}>{`<`}</Text>
+        </TouchableOpacity>
+        <FlatList
+          ref={scrollRef}
+          data={pints}
+          scrollEnabled={false}
+          pagingEnabled={true}
+          decelerationRate={'fast'}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                height: 50,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Text style={styles.pintName}>
+                {item.name} (
+                {finishedPints.filter((pint) => pint.name === item.name).length}
+                )
+              </Text>
+            </View>
+          )}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.name}
+        />
+        <TouchableOpacity
+          onPress={() => toggleDrinks('+')}
+          style={{ paddingRight: 16 }}
+        >
+          <Text style={[styles.pintName, { opacity: 0.2 }]}>{`>`}</Text>
+        </TouchableOpacity>
+      </View>
+  )
 }
 
 export default function App() {
@@ -70,51 +129,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          height: 50,
-          overflow: 'hidden',
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => toggleDrinks('-')}
-          style={{ paddingLeft: 16 }}
-        >
-          <Text style={[styles.pintName, { opacity: 0.2 }]}>{`<`}</Text>
-        </TouchableOpacity>
-        <FlatList
-          ref={scrollRef}
-          data={pints}
-          scrollEnabled={false}
-          pagingEnabled={true}
-          decelerationRate={'fast'}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                height: 50,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Text style={styles.pintName}>
-                {item.name} (
-                {finishedPints.filter((pint) => pint.name === item.name).length}
-                )
-              </Text>
-            </View>
-          )}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.name}
-        />
-        <TouchableOpacity
-          onPress={() => toggleDrinks('+')}
-          style={{ paddingRight: 16 }}
-        >
-          <Text style={[styles.pintName, { opacity: 0.2 }]}>{`>`}</Text>
-        </TouchableOpacity>
-      </View>
+      <Header {...{ toggleDrinks, scrollRef, pints, finishedPints }} />
       <PintsList {...{ pints, onMomentumScrollEnd, currentIndex }} />
       <AnimatedPintTotal
         color={pints[currentIndex].color}
