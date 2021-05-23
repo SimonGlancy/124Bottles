@@ -1,3 +1,4 @@
 export * from './pint'
-export * from './pintsList'
-export * from './animatedPintTotal'
+export * from './pints-list'
+export * from './animated-pint-total'
+export * from './header'

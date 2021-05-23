@@ -6,7 +6,7 @@ import {
   StyleSheet
 } from 'react-native';
 import { Pint } from '../pint'
-import  { PintsListProps } from './pinstList.types'
+import  { PintsListProps } from './pinst-list.types'
 
 const PintsList = (props: PintsListProps) => {
   const { pints, onMomentumScrollEnd, currentIndex } = props;
