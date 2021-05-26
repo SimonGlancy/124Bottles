@@ -12,10 +12,10 @@ const HeaderText = ( props: HeaderTextProps ) => {
 
   return(
     <View style={styles.headerTitle} >
-      <Text style={styles.pintName}>
+      <Text testID="pint-name" style={styles.pintName}>
         {item.name} 
       </Text>
-      <AnimatedPintTotal 
+      <AnimatedPintTotal
         color={'black'} 
         number={finishedPints.filter((pint) => pint.name === item.name).length} 
         size={24}

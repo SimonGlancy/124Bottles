@@ -34,6 +34,7 @@ const Header = ( props: HeaderProps ) => {
           keyExtractor={(item) => item.name}
         />
         <TouchableOpacity
+          testID="increment-drinks-button"
           onPress={() => toggleDrinks('+')}
           style={{ paddingRight: 16 }}
         >
