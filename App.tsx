@@ -25,7 +25,6 @@ export const AbsoluteWrapper: FunctionComponent = (props) => {
   const { children } = props
   return(
     <View 
-    // pointerEvents="none"
     style={{
       position: 'absolute',
       top: '50%',
@@ -41,8 +40,6 @@ export const AbsoluteWrapper: FunctionComponent = (props) => {
 export default function App() {
   const [finishedPints, setFinishedPints] = useState<DrankPint[]>([]);
   const [modal, setModal] = useState(false)
-  const { width, height} = Dimensions.get('window')
-  const modalAnimation = useRef(new Animated.Value(0)).current
 
   const onFinishPint = (index: number) => {
     setFinishedPints((prev) => {
@@ -134,39 +131,19 @@ export default function App() {
     }
   },[finishedPints.length])
 
-  // const modalFade = () => {
-
-  //   Animated.timing(modalAnimation, {
-  //     toValue: 1,
-  //     duration: 3000,
-  //     useNativeDriver: true
-  //   })
-  // }
-
-  // const opacity = modalAnimation.interpolate({
-  //   inputRange: [0, 1],
-  //   outputRange: [0, 1]
-  // })
-
-  const modalPress = () => {
-    setModal(true)
-    // modalFade()
-  }
-
   return (
     <SafeAreaView style={styles.container}>
       <Header {...{ toggleDrinks, scrollRef, pints, finishedPints }} />
       <PintsList {...{ pints, onMomentumScrollEnd, currentIndex }} />
       <AbsoluteWrapper>
-        <TouchableOpacity onPress={() => modalPress()}>
+        <TouchableOpacity onPress={() => setModal(true)}>
           <AnimatedPintTotal
             color={pints[currentIndex].color}
             number={finishedPints.length}
             size={200}
             textSizeRatio={0.4}
           />
-          
-          <Modal visible={modal} animationType={'slide'} transparent={true}>
+          <Modal visible={modal} animationType={'fade'} transparent={true}>
             <View style={{flex: 1, backgroundColor: 'none'}}>
             <TouchableOpacity onPress={() => setModal(!modal)} style={{flex: 1, backgroundColor: 'black', opacity: 0.4}} />
                 <DrankPintStats {...{finishedPints, pints}}/>
