@@ -14,6 +14,7 @@ import {
 import { PintProps, PintsList, AnimatedPintTotal, Header, DrankPintStats } from './src/components'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs from 'dayjs';
+import * as Updates from 'expo-updates';
 
 export interface DrankPint extends PintProps {
   dateDrank: Date;
