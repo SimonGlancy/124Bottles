@@ -54,12 +54,14 @@ export default function App() {
     {
       name: 'Lager',
       color: '#ffc800',
+      units: 3,
+      calories: 180,
       onFinishPint: () => onFinishPint(0),
     },
-    { name: 'Guinness', color: 'black', onFinishPint: () => onFinishPint(1) },
-    { name: 'Cider', color: '#FFF48F', onFinishPint: () => onFinishPint(2) },
-    { name: 'Pale Ale', color: '#DF8D03', onFinishPint: () => onFinishPint(3) },
-    { name: 'Bitter', color: '#C96E12', onFinishPint: () => onFinishPint(4) },
+    { name: 'Guinness', color: 'black', units: 2.3, calories: 210, onFinishPint: () => onFinishPint(1) },
+    { name: 'Cider', color: '#FFF48F', units: 2, calories: 210, onFinishPint: () => onFinishPint(2) },
+    { name: 'Pale Ale', color: '#DF8D03', units: 2.6, calories: 182, onFinishPint: () => onFinishPint(3) },
+    { name: 'Bitter', color: '#C96E12', units: 2.1, calories: 160, onFinishPint: () => onFinishPint(4) },
   ]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
