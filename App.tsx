@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { PintProps, PintsList, AnimatedPintTotal, Header, DrankPintStats } from './src/components'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import dayjs from 'dayjs';
 
 export interface DrankPint extends PintProps {
   dateDrank: Date;
@@ -47,6 +48,9 @@ export default function App() {
       { ...pints[index], dateDrank: new Date() },
     ]
     storeData(update)
+    if ( dayjs(update[update.length - 1].dateDrank).format('DD/MM/JJ') === dayjs(update[update.length - 2].dateDrank).format('DD/MM/JJ') && dayjs(update[update.length - 2].dateDrank).format('DD/MM/JJ') === dayjs(update[update.length - 3].dateDrank).format('DD/MM/JJ') && dayjs(update[update.length - 3].dateDrank).format('DD/MM/JJ') === dayjs(update[update.length - 4].dateDrank).format('DD/MM/JJ') ) {
+       window.alert('Drink some water! The economy does not have to be saved in one day')
+     }
     return update
   });
   };
