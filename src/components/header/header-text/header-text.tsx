@@ -21,7 +21,7 @@ const HeaderText = ( props: HeaderTextProps ) => {
         {item.name} 
       </Text>
       </TouchableOpacity>
-      <Modal visible={modal} animationType={'slide'} transparent={true}>
+      <Modal visible={modal} animationType={'fade'} transparent={true}>
             <View style={{flex: 1, backgroundColor: 'none'}}>
             <TouchableOpacity onPress={() => setModal(!modal)} style={{flex: 1, backgroundColor: 'black', opacity: 0.4}} />
                 <GeneralPintStats pint={item}/>
