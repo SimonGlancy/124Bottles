@@ -12,8 +12,6 @@ import dayjs from 'dayjs';
 const DrankPintStats = ( {finishedPints, pints}: { finishedPints: DrankPint[], pints: PintProps[]}) => {
 
   const { width, height} = Dimensions.get('window')
-  console.log(pints)
-  console.log(finishedPints)
 
   return(
     <View style={{justifyContent: 'flex-end', height: height * 0.6, width, backgroundColor: 'white', position: 'absolute', bottom: 0, left: 0}}>
@@ -33,9 +31,9 @@ const DrankPintStats = ( {finishedPints, pints}: { finishedPints: DrankPint[], p
 
       return(
         <View key={index} style={{top: height * 0.1, flexDirection: 'row', justifyContent: 'space-between', height: height * 0.05, margin: 10}}>
+          <Text style={{position: 'absolute', right: 10, top: 2}} >{amountOfCalories} kCal / {amountOfUnits} units</Text>
           <View style={{backgroundColor: `${item.color}`, position:'relative', width: width * (percentage / 100)}}/>
           <Text style={{alignSelf: 'center', fontSize: 24, color: 'gray', position: 'absolute', marginLeft: 10}}>{item.name}</Text>
-          <Text>{amountOfCalories} kCal / {amountOfUnits} units</Text>
         </View>
       )
     }}

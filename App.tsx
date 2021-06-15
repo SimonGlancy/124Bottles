@@ -10,6 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Animated,
 } from 'react-native';
 import { PintProps, PintsList, AnimatedPintTotal, Header, DrankPintStats } from './src/components'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -41,6 +42,7 @@ export default function App() {
   const [finishedPints, setFinishedPints] = useState<DrankPint[]>([]);
   const [modal, setModal] = useState(false)
   const { width, height} = Dimensions.get('window')
+  const modalAnimation = useRef(new Animated.Value(0)).current
 
   const onFinishPint = (index: number) => {
     setFinishedPints((prev) => {
@@ -49,11 +51,13 @@ export default function App() {
       { ...pints[index], dateDrank: new Date() },
     ]
     storeData(update)
-    if ( dayjs(update[update.length - 1].dateDrank).format('DD/MM/JJ') === dayjs(update[update.length - 2].dateDrank).format('DD/MM/JJ') && dayjs(update[update.length - 2].dateDrank).format('DD/MM/JJ') === dayjs(update[update.length - 3].dateDrank).format('DD/MM/JJ') && dayjs(update[update.length - 3].dateDrank).format('DD/MM/JJ') === dayjs(update[update.length - 4].dateDrank).format('DD/MM/JJ') ) {
-       window.alert('Drink some water! The economy does not have to be saved in one day')
-     }
-    return update
+    if (update.length >= 4) {
+        if ( dayjs(update[update.length - 1].dateDrank).format('DD/MM/JJ') === dayjs(update[update.length - 2].dateDrank).format('DD/MM/JJ') && dayjs(update[update.length - 2].dateDrank).format('DD/MM/JJ') === dayjs(update[update.length - 3].dateDrank).format('DD/MM/JJ') && dayjs(update[update.length - 3].dateDrank).format('DD/MM/JJ') === dayjs(update[update.length - 4].dateDrank).format('DD/MM/JJ') ) {
+          window.alert('Drink some water! The economy does not have to be saved in one day')
+      }}
+      return update
   });
+
   };
   const [pints, setPints] = useState<PintProps[]>([
     {
@@ -119,6 +123,7 @@ export default function App() {
     }
   }  
 
+
   useEffect(() => {
     getData()
   }, [])
@@ -129,12 +134,31 @@ export default function App() {
     }
   },[finishedPints.length])
 
+  // const modalFade = () => {
+
+  //   Animated.timing(modalAnimation, {
+  //     toValue: 1,
+  //     duration: 3000,
+  //     useNativeDriver: true
+  //   })
+  // }
+
+  // const opacity = modalAnimation.interpolate({
+  //   inputRange: [0, 1],
+  //   outputRange: [0, 1]
+  // })
+
+  const modalPress = () => {
+    setModal(true)
+    // modalFade()
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Header {...{ toggleDrinks, scrollRef, pints, finishedPints }} />
       <PintsList {...{ pints, onMomentumScrollEnd, currentIndex }} />
       <AbsoluteWrapper>
-        <TouchableOpacity onPress={() => setModal(true)}>
+        <TouchableOpacity onPress={() => modalPress()}>
           <AnimatedPintTotal
             color={pints[currentIndex].color}
             number={finishedPints.length}
