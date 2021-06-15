@@ -4,5 +4,6 @@ export interface PintProps {
   pintSize?: number;
   units: number;
   calories: number;
+  alcoholPercentage: number;
   onFinishPint: () => void;
 }
