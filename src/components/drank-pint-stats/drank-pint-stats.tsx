@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { DrankPint } from '../../../App';
 import { Pint, PintProps } from '../pint';
+import dayjs from 'dayjs';
 
 const DrankPintStats = ( {finishedPints, pints}: { finishedPints: DrankPint[], pints: PintProps[]}) => {
 
@@ -16,7 +17,10 @@ const DrankPintStats = ( {finishedPints, pints}: { finishedPints: DrankPint[], p
 
   return(
     <View style={{justifyContent: 'flex-end', height: height * 0.6, width, backgroundColor: 'white', position: 'absolute', bottom: 0, left: 0}}>
-    <Text style={{position: 'absolute', top: 10, fontWeight: 'bold', fontSize: 24, padding: 10}} >Consumption:</Text>
+      <View style={{flexDirection: 'row', padding: 10, position: 'absolute', top: 10, width}}> 
+        <Text style={{position: 'absolute', top: 10, fontWeight: 'bold', fontSize: 24, padding: 10}} >Consumption:</Text>
+        <Text style={{position: 'absolute', top: 25, right: 10}}> Since {dayjs(finishedPints[0].dateDrank).format('MM/DD')}{}</Text>
+      </View>
     <FlatList
     data={pints}
     keyExtractor={pints => pints.name}
