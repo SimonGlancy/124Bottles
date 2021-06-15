@@ -8,11 +8,10 @@ import {
   NativeSyntheticEvent,
   SafeAreaView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { PintProps, PintsList, AnimatedPintTotal, Header } from './src/components'
+import { PintProps, PintsList, AnimatedPintTotal, Header, DrankPintStats } from './src/components'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface DrankPint extends PintProps {
@@ -136,14 +135,10 @@ export default function App() {
           />
           
           <Modal visible={modal} animationType={'slide'} transparent={true}>
-            <TouchableOpacity onPress={() => setModal(!modal)} style={{flex: 1, backgroundColor: 'black', opacity: 0.4}}>
-              {/* <SafeAreaView  > */}
-              <View style={{justifyContent: 'flex-end', height: height * 0.4, width, backgroundColor: 'white', position: 'absolute', bottom: 0, left: 0}}>
-                <Text >Hello World</Text>
-              </View>
-              {/* </SafeAreaView> */}
-              </TouchableOpacity>
-
+            <View style={{flex: 1, backgroundColor: 'none'}}>
+            <TouchableOpacity onPress={() => setModal(!modal)} style={{flex: 1, backgroundColor: 'black', opacity: 0.4}} />
+                <DrankPintStats {...{finishedPints, pints}}/>
+            </View>
           </Modal>
         </TouchableOpacity>
       </AbsoluteWrapper>
