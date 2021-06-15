@@ -1,13 +1,9 @@
-import React, { FunctionComponent, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Animated,
   Easing,
-  Dimensions,
   StyleSheet,
-  View
 } from 'react-native';
-
-
 
   const AnimatedPintTotal = (props: { color: string; number: number, size: number, textSizeRatio?: number }) => {
     const { color, number, size, textSizeRatio = 0.7 } = props;
@@ -57,9 +53,7 @@ import {
           width: size,
           height: size,
           borderRadius: size,
-
           backgroundColor: color,
- 
           alignItems: 'center',
           justifyContent: 'center',
           transform: [

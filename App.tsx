@@ -2,11 +2,14 @@ import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Dimensions,
+  Modal,
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
   SafeAreaView,
   StyleSheet,
+  Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { PintProps, PintsList, AnimatedPintTotal, Header } from './src/components'
@@ -20,7 +23,7 @@ export const AbsoluteWrapper: FunctionComponent = (props) => {
   const { children } = props
   return(
     <View 
-    pointerEvents="none"
+    // pointerEvents="none"
     style={{
       position: 'absolute',
       top: '50%',
@@ -35,6 +38,8 @@ export const AbsoluteWrapper: FunctionComponent = (props) => {
 
 export default function App() {
   const [finishedPints, setFinishedPints] = useState<DrankPint[]>([]);
+  const [modal, setModal] = useState(false)
+  const { width, height} = Dimensions.get('window')
 
   const onFinishPint = (index: number) => {
     setFinishedPints((prev) => {
@@ -122,12 +127,25 @@ export default function App() {
       <Header {...{ toggleDrinks, scrollRef, pints, finishedPints }} />
       <PintsList {...{ pints, onMomentumScrollEnd, currentIndex }} />
       <AbsoluteWrapper>
-        <AnimatedPintTotal
-          color={pints[currentIndex].color}
-          number={finishedPints.length}
-          size={200}
-          textSizeRatio={0.4}
-        />
+        <TouchableOpacity onPress={() => setModal(true)}>
+          <AnimatedPintTotal
+            color={pints[currentIndex].color}
+            number={finishedPints.length}
+            size={200}
+            textSizeRatio={0.4}
+          />
+          
+          <Modal visible={modal} animationType={'slide'} transparent={true}>
+            <TouchableOpacity onPress={() => setModal(!modal)} style={{flex: 1, backgroundColor: 'black', opacity: 0.4}}>
+              {/* <SafeAreaView  > */}
+              <View style={{justifyContent: 'flex-end', height: height * 0.4, width, backgroundColor: 'white', position: 'absolute', bottom: 0, left: 0}}>
+                <Text >Hello World</Text>
+              </View>
+              {/* </SafeAreaView> */}
+              </TouchableOpacity>
+
+          </Modal>
+        </TouchableOpacity>
       </AbsoluteWrapper>
     </SafeAreaView>
   );
