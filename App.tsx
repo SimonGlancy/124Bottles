@@ -50,7 +50,7 @@ export default function App() {
     storeData(update)
     if (update.length >= 4) {
         if ( dayjs(update[update.length - 1].dateDrank).format('DD/MM/JJ') === dayjs(update[update.length - 2].dateDrank).format('DD/MM/JJ') && dayjs(update[update.length - 2].dateDrank).format('DD/MM/JJ') === dayjs(update[update.length - 3].dateDrank).format('DD/MM/JJ') && dayjs(update[update.length - 3].dateDrank).format('DD/MM/JJ') === dayjs(update[update.length - 4].dateDrank).format('DD/MM/JJ') ) {
-          window.alert('Drink some water! The economy does not have to be saved in one day')
+          Alert.alert('Alright Boozy Boris', 'Drink some water! The economy does not need to be saved in one day')
       }}
       return update
   });
