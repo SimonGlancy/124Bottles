@@ -1,18 +1,38 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Dimensions,
   Text,
   View,
-  StyleSheet
+  StyleSheet,
+  Animated
 } from 'react-native';
 import { PintProps } from '../pint';
 
 const GeneralPintStats = ({pint}: {pint: PintProps }) => {
 
   const {width, height} = Dimensions.get('window')
+  const scrollAnimation = useRef(new Animated.Value(0)).current;
+  
+  const animate = () => {
+
+    Animated.timing(scrollAnimation, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true
+    }).start()
+  }
+
+  const scroll = scrollAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [height, 0]
+  })
+
+  useEffect(() => {
+    animate()
+  })
 
   return(
-    <View style={{justifyContent: 'flex-end', height: height * 0.22, width, backgroundColor: 'white', position: 'absolute', bottom: 0, left: 0, borderRadius: 10}}>
+    <Animated.View style={{justifyContent: 'flex-end', height: height * 0.22, width, backgroundColor: 'white', position: 'absolute', bottom: 0, left: 0, borderRadius: 10, transform: [{ translateY: scroll}]}}>
       <View style={styles.header}>
       <Text style={styles.title}>{pint.name}</Text>
       <Text style={styles.information}>Information per pint</Text>
@@ -20,7 +40,7 @@ const GeneralPintStats = ({pint}: {pint: PintProps }) => {
       <Text style={styles.calories}>{pint.calories} kCal</Text>
       <Text style={styles.units}>{pint.units} units</Text>
       <Text style={styles.percentage}>{pint.alcoholPercentage}% alcohol</Text>
-    </View>
+    </Animated.View>
   )
 }
 
