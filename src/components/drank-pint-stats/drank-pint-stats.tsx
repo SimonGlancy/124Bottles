@@ -9,6 +9,7 @@ import {
 import { DrankPint } from '../../../App';
 import { PintProps } from '../pint';
 import dayjs from 'dayjs';
+import { AnimatedStatsBar } from './animated-stats-bar';
 
 const DrankPintStats = ( {finishedPints, pints}: { finishedPints: DrankPint[], pints: PintProps[]}) => {
 
@@ -35,7 +36,7 @@ const DrankPintStats = ( {finishedPints, pints}: { finishedPints: DrankPint[], p
   })
 
   return(
-    <Animated.View style={{justifyContent: 'flex-end', height: height * 0.6, width, backgroundColor: 'white', position: 'absolute', bottom: 0, left: 0, right: 0, transform: [{translateY: scroll}]}}>
+    <Animated.View style={{justifyContent: 'flex-end', height: height * 0.6, width, backgroundColor: 'white', position: 'absolute', bottom: 0, left: 0, right: 0, transform: [{translateY: scroll}], borderTopLeftRadius: 18, borderTopRightRadius: 18}}>
       <View style={{flexDirection: 'row', padding: 10, position: 'absolute', top: 10, width}}> 
         <Text style={{position: 'absolute', top: 10, fontWeight: 'bold', fontSize: 24, padding: 10}} >Consumption:</Text>
         <Text style={{position: 'absolute', top: 25, right: 10}}> Since {dayjs(finishedPints[0].dateDrank).format('MM/DD/YY')}</Text>
@@ -53,7 +54,7 @@ const DrankPintStats = ( {finishedPints, pints}: { finishedPints: DrankPint[], p
       return(
         <View key={index} style={{top: height * 0.1, flexDirection: 'row', justifyContent: 'space-between', margin: 10, height: newHeight}}>
           <Text style={{position: 'absolute', right: 10, top: 2}} >{amountOfCalories} kCal / {amountOfUnits} units</Text>
-          <View style={{backgroundColor: `${item.color}`, position:'relative', width: `${percentage}%` }}/>
+          <AnimatedStatsBar {...{item, percentage}} delay={index * 500} />
           <Text style={{alignSelf: 'center', fontSize: 24, color: 'gray', position: 'absolute', marginLeft: 10}}>{item.name}</Text>
         </View>
       )
