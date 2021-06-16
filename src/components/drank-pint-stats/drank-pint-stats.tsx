@@ -54,7 +54,7 @@ const DrankPintStats = ( {finishedPints, pints}: { finishedPints: DrankPint[], p
       return(
         <View key={index} style={{top: height * 0.1, flexDirection: 'row', justifyContent: 'space-between', margin: 10, height: newHeight}}>
           <Text style={{position: 'absolute', right: 10, top: 2}} >{amountOfCalories} kCal / {amountOfUnits} units</Text>
-          <AnimatedStatsBar {...{item, percentage}} delay={index * 500} />
+          <AnimatedStatsBar {...{item, percentage}} delay={index * 800} />
           <Text style={{alignSelf: 'center', fontSize: 24, color: 'gray', position: 'absolute', marginLeft: 10}}>{item.name}</Text>
         </View>
       )
